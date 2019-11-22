@@ -54,10 +54,6 @@ function createFeatures(earthquakeData) {
     // Add circles to map
     var myCircle = L.circle(coordinates, {
       fillOpacity: 0.75,
-      // color: "red",
-      // fillColor: "red",
-      // // Adjust radius
-      // radius: (10 * 15000)
       color: color,
       fillColor: color,
       // Adjust radius
@@ -95,35 +91,25 @@ function createFeatures(earthquakeData) {
      collapsed: false
   }).addTo(myMap);
 
-  //create the legend
-  var legend = L.control({position: 'bottomright'});
+ //create the legend
+ var legend = L.control({position: 'bottomright'});
 
-  legend.onAdd = function (map) {
-  	var div = L.DomUtil.create('div', 'info legend');
-  	var grades = ["0-1", "1-2", "2-3", "3-4", "4-5", "5+"];
-    var color = ["#00ccbc","#90eb9d","#f9d057","#f29e2e","#e76818","#d7191c"];
+ legend.onAdd = function (map) {
+   var div = L.DomUtil.create('div', 'info legend');
+   labels = ['<strong>Magnitude</strong>'],
+   grades = ["0-1", "1-2", "2-3", "3-4", "4-5", "5+"];
+   var color = ["#00ccbc","#90eb9d","#f9d057","#f29e2e","#e76818","#d7191c"];
 
-  	// loop through our density intervals and generate a label with a colored square for each interval
-  	for (var i = 0; i < grades.length; i++) {
-  		div.innerHTML +=
-  			'<p style="margin-left: 15px">' + '<i style="background:' + color[i] + ' "></i>' + '&nbsp;&nbsp;' + grades[i]+ '<\p>';
-  	}
+   // loop through our density intervals and generate a label with a colored square for each interval
+   for (let i = 0; i < grades.length; i++) {
+    div.innerHTML += 
+    labels.push(
+        '<i style="background:' + color[i] + '"></i> ' + (grades[i] ? grades[i] : '+'));
+    }
+    div.innerHTML = labels.join('<br>');
+    return div;
+};
 
-  	return div;
-  };
-
-  //Add the legend by default
-  legend.addTo(myMap)
-
-  //Overlay listener for adding
-  myMap.on('overlayadd', function(a) {
-    //Add the legend
-    legend.addTo(myMap);
-  });
-
-  //Overlay listener for remove
-  myMap.on('overlayremove', function(a) {
-    //Remove the legend
-    myMap.removeControl(legend);
-  });
-}
+ //Add the legend by default
+ legend.addTo(myMap)
+};
